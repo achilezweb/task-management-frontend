@@ -17,7 +17,7 @@
           </li>
         </ul>
         <form @submit.prevent="addTask" class="flex">
-          <input v-model="newTask" class="w-full p-2 mr-6 text-black rounded" placeholder="New Task" />
+          <input v-model="newTask" class="w-full p-2 mr-6 text-black rounded" placeholder="New Task" required/>
           <button type="submit" class="w-1/3 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Add Task</button>
         </form>
       </div>
@@ -39,7 +39,7 @@
     },
     methods: {
       fetchTasks() {
-        axios.get('/tasks')
+        axios.get('/v1/tasks')
           .then(response => {
             this.tasks = response.data.data; // Access the nested "data" field
           })
@@ -48,7 +48,7 @@
           });
       },
       addTask() {
-        axios.post('/tasks', { title: this.newTask })
+        axios.post('/v1/tasks', { title: this.newTask })
           .then(response => {
             this.tasks.unshift(response.data.data);
             this.newTask = '';
@@ -58,7 +58,7 @@
           });
       },
       toggleComplete(task) {
-        axios.put(`/tasks/${task.id}`, { completed: !task.completed })
+        axios.put(`/v1/tasks/${task.id}`, { completed: !task.completed })
           .then(response => {
             task.completed = response.data.data.completed;
           })
@@ -67,7 +67,7 @@
           });
       },
       deleteTask(id) {
-        axios.delete(`/tasks/${id}`)
+        axios.delete(`/v1/tasks/${id}`)
           .then(() => {
             this.tasks = this.tasks.filter(task => task.id !== id);
           })
